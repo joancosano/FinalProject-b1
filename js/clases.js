@@ -1,4 +1,4 @@
-class Usuario {
+export class Usuario {
     #nombre;
     #apellidos;
     #direccion;
@@ -106,9 +106,22 @@ toString(){
     password:this.#password,
     })
 }
+toJSON(){
+    return {
+    nombre:this.#nombre,
+    apellidos:this.#apellidos,
+    direccion:this.#direccion,
+    poblacion:this.#poblacion,
+    codigoPostal:this.#codigoPostal,
+    telefono:this.#telefono,
+    correo:this.#correo,
+    usuario:this.#usuario,
+    password:this.#password,
+    };
+}
 }
 
-class Producto{
+export class Producto{
     #nombre;
     #tipo;
     #enlace;
@@ -155,7 +168,7 @@ setEnlace(enlace){
 
 }
 
-class Lista{
+export class Lista{
     #usuario;
     #fecha;
     #productos;

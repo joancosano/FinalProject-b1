@@ -42,13 +42,13 @@ buttons.classList.add("buttonsForm")
 //creamos el botón looging
 const loginButton = document.createElement("button");
 loginButton.type = "submit";
-loginButton.textContent = "Login"
+loginButton.textContent = "Aceptar"
 
 
-//creamos el botón registrarse
+//creamos el botón nuevo usuario
 const registerButton = document.createElement("button");
 registerButton.type = "button";
-registerButton.textContent = "Registrarse"
+registerButton.textContent = "Nuevo Usuario"
 
 registerButton.addEventListener("click", () => {
     window.location.href = "registro.html";
