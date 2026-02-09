@@ -1,10 +1,12 @@
+import {recuperarUsuarios} from "./utils.js";
+
 //////////////////header////////////////////////////
 
 const bienBenida = document.createElement("h1");
 bienBenida.textContent= `Bienvenido/a a ${document.title}`
 document.querySelector("header").appendChild(bienBenida); 
 
-
+    
 ////////////////// main ////////////////////////////
 
 // Creo el formulario
@@ -79,3 +81,43 @@ buttons.appendChild(registerButton);
 buttons.appendChild(loginButton);
 loginBackground.appendChild(form)
 main.appendChild(loginBackground);
+
+
+// borramos el error al comenzar a escribir de nuevo.
+
+inputUser.addEventListener("input",event =>{
+
+    const error = document.querySelector(".error-usuario");
+    if (error){
+        error.remove()
+    }
+
+})
+
+////// logica de login ////////
+
+form.addEventListener("submit", (event) =>{
+    event.preventDefault();
+
+    const error = document.querySelector(".error-usuario");
+    if (error){
+        error.remove()
+    }
+
+    const user = inputUser.value
+    const pass = inputPass.value
+
+    const usuarios = recuperarUsuarios();
+
+    const usuarioValido = usuarios.find (u => u.getUsuario() === user && u.getPassword() === pass)
+
+    if (usuarioValido){
+        window.location.href = `productos.html?usuario=${usuarioValido.getUsuario()}`;
+    }else{
+        const error = document.createElement("p");
+        error.classList.add("error-usuario")
+        error.textContent = "Usuario o password incorrecto";
+        inputPass.insertAdjacentElement("afterend",error);
+        return;
+    }
+    })

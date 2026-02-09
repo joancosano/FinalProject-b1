@@ -1,10 +1,11 @@
 ///////////////////clases/////////////////////////
 console.log("hola")
-//iportamos las clases
+//importamos las clases
 
 import {Usuario} from "./clases.js"
 import {poblaciones} from "./datos.js";
 import {existeUsuario} from "./utils.js";
+import {recuperarUsuarios} from "./utils.js";
 
 
 ////////////////// header ////////////////////////
@@ -60,6 +61,14 @@ const labelDireccion = document.createElement("label");
 labelDireccion.textContent = "Dirección:"
 labelDireccion.htmlFor = "direccion"
  
+
+//crear el campo CP
+const inputCP = document.createElement("input");
+inputCP.type = "text"
+inputCP.name = "codigoPostal";
+inputCP.id = "codigoPostal";
+inputCP.placeholder = "Introdue el código postal de tu población";
+
 //crear el campo poblacion
 const selectPoblacion = document.createElement("select");
 selectPoblacion.name = "poblacion"
@@ -89,14 +98,8 @@ poblaciones.forEach(poblacion =>{
 // crear la etiqueta para el campo poblacion
 const labelPoblacion = document.createElement("label");
 labelPoblacion.textContent = "Población:"
-labelPoblacion.htmlFor = "poblacion"
+labelPoblacion.htmlFor = "poblacion";
 
-//crear el campo CP
-const inputCP = document.createElement("input");
-inputCP.type = "text"
-inputCP.name = "codigoPostal";
-inputCP.id = "codigoPostal";
-inputCP.placeholder = "Introdue el código postal de tu población";
 
 // crear la etiqueta para el campo CP
 const labelCP = document.createElement("label");
@@ -146,7 +149,9 @@ const inputPass = document.createElement("input");
 inputPass.type = "password";
 inputPass.name = "password";
 inputPass.id = "password";
-inputPass.placeholder = "introduce un password";
+inputPass.title = "Mínimo 8 caracteres, letras, números y al menos 2 símbolos especiales"
+inputPass.placeholder = "Mín. 8 caracteres y 2 símbolos especiales";
+inputPass.required = true;
 inputPass.pattern = "(?=(?:.*[A-Za-z]))(?=(?:.*\\d))(?=(?:.*[^A-Za-z0-9]){2,}).{8,}"
 
 // crear la etiqueta para el campo Pass
@@ -181,10 +186,10 @@ form.appendChild(labelApellidos);
 form.appendChild(inputApellidos);
 form.appendChild(labelDireccion);
 form.appendChild(inputDireccion);
-form.appendChild(labelCP);
-form.appendChild(inputCP);
 form.appendChild(labelPoblacion);
 form.appendChild(selectPoblacion);
+form.appendChild(labelCP);
+form.appendChild(inputCP);
 form.appendChild(labelTelefono);
 form.appendChild(inputTelefono);
 form.appendChild(labelCorreo);
@@ -209,7 +214,7 @@ inputTelefono.addEventListener("change", event =>{
 
     if (!regEx.test(tel) && tel != ""){
         const error = document.createElement("p");
-        error.classList.add("error")
+        error.classList.add("error-telefono")
         error.textContent = "Formato de número de teléfono incorrecto";
         inputTelefono.insertAdjacentElement("afterend",error);
     }
@@ -217,7 +222,7 @@ inputTelefono.addEventListener("change", event =>{
 
 inputTelefono.addEventListener("input",event =>{
 
-    const error = document.querySelector(".error");
+    const error = document.querySelector(".error-telefono");
     if (error){
         error.remove()
     }
@@ -233,7 +238,7 @@ const email = inputCorreo.value.replaceAll(/\s+/g,"")
 
   if (!regEx.test(email) && email != ""){
         const error = document.createElement("p");
-        error.classList.add("error")
+        error.classList.add("error-mail")
         error.textContent = "Formato de número de e-mail incorrecto";
         inputCorreo.insertAdjacentElement("afterend",error);
     }
@@ -242,14 +247,14 @@ const email = inputCorreo.value.replaceAll(/\s+/g,"")
 
 inputCorreo.addEventListener("input",event =>{
 
-    const error = document.querySelector(".error");
+    const error = document.querySelector(".error-mail");
     if (error){
         error.remove()
     }
     
 })
 
-//creamos los listener del CP y las Poblaciones
+//Rellenamos automáticamente la pobación mediante el CP y viceversa
 
 selectPoblacion.addEventListener("change", event =>{
 
@@ -262,15 +267,41 @@ inputCP.addEventListener("input", event => {
     selectPoblacion.value = inputCP.value || "";
 });
 
-// creamos un evento para borrar el mensaje de error al comenzar a modificar el usuario.
+// validamos el password para mostrar una error en el caso de ser invalido en el DOM
 
-inputUser.addEventListener("input",event =>{
+inputPass.addEventListener("change", event =>{
 
-    const error = document.querySelector(".error");
+const regEx = /^(?=(?:.*[A-Za-z]))(?=(?:.*\d))(?=(?:.*[^A-Za-z0-9]){2,}).{8,}$/
+const pass = inputPass.value
+
+  if (!regEx.test(pass) && pass != ""){
+        const error = document.createElement("p");
+        error.classList.add("error-pass")
+        error.textContent = "Formato de password incorrecto";
+        inputPass.insertAdjacentElement("afterend",error);
+    }
+
+})
+
+inputPass.addEventListener("input",event =>{
+
+    const error = document.querySelector(".error-pass");
     if (error){
         error.remove()
     }
     
+})
+
+
+// Borramos el mensaje de error al comenzar a modificar el usuario si ya existia.
+
+inputUser.addEventListener("input",event =>{
+
+    const error = document.querySelector(".error-usuario");
+    if (error){
+        error.remove()
+    }
+
 })
 
 // definimos el evento del botón submit del formulario.
@@ -296,13 +327,13 @@ event.preventDefault();
         nombre,apellidos,direccion,poblacion,codigoPostal,telefono,correo,usuario,password
     );
 
- //recuperamos los usuarios almacenados en localStore
+ //recuperamos los usuarios almacenados en localStore como objetos de la clase Usuario.
 
-    const usuarios = JSON.parse(localStorage.getItem("usuarios")) || [];
+    const usuarios = recuperarUsuarios();
 
 // si habia un error en pantalla al tratar de registrar un usuario duplicado lo borramos. 
 
-    const errorPrevio = document.querySelector(".error");
+    const errorPrevio = document.querySelector(".error-usuario");
 
     if (errorPrevio){
         errorPrevio.remove()
@@ -313,7 +344,7 @@ si no existe error lo almacenamos en localStore y redirigimos a login */
 
     if (existeUsuario(nuevoUsuario,usuarios)){
         const error = document.createElement("p");
-        error.classList.add("error")
+        error.classList.add("error-usuario")
         error.textContent = "El usuario ya existe";
         inputUser.insertAdjacentElement("afterend",error);
         return;
