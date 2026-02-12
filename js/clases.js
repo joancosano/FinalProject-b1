@@ -209,4 +209,11 @@ toString(){
         productos: this.#productos,
     });
 }
+toJSON(){
+    return {
+        usuario: this.#usuario,
+        fecha: this.#fecha,
+        productos: this.#productos,
+    };
+}
 }
