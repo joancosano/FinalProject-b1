@@ -2,29 +2,23 @@ import {categorias} from "./datos.js"
 import {productos} from "./datos.js"
 import {Lista} from "./clases.js"
 import {Usuario} from "./clases.js"
+import { createHeader } from "./utils.js"
+import { createFooter } from "./utils.js"
 
 const paramsUrl = new URLSearchParams(window.location.search);
 const usuario = paramsUrl.get("usuario");
 
-///////////////////////// header ///////////////////////////////////
+////////////////// Header y Footer ///////////////////////////////
 
-const bienBenida = document.createElement("h1");
-bienBenida.textContent= `Bienvenido/a a ${document.title}`
-document.querySelector("header").appendChild(bienBenida); 
-
-///////////////////////// footer ///////////////////////////////////
-
-const containerFooter = document.createElement("div")
-document.querySelector("footer").appendChild(containerFooter);
-const footerText = document.createElement("p");
-footerText.textContent = "website created by Joan";
-containerFooter.appendChild(footerText);
+createHeader();
+createFooter();
 
 //////////////////// main ////////////////////////////////////////
 
 const body = document.querySelector("body");
 const main = document.querySelector("main");
 const containerCategorias = document.createElement("div");
+containerCategorias.classList.add("container-categorias");
 const containerProductos = document.createElement("div");
 let categoriaSeleccionada = null;   
 
@@ -74,6 +68,9 @@ let listaCompra = []
             nombreProducto.textContent = producto.nombre;
             nombreProducto.appendChild(marco);
             containerProductos.appendChild(nombreProducto);
+            containerProductos.classList.add("grid-productos");
+            containerProductos.classList.add("contenedor-productos");
+
         })}
     
     categorias.forEach(element => {
@@ -89,7 +86,6 @@ let listaCompra = []
 
     const botonGuardar = document.createElement("button");
     botonGuardar.textContent = "Guardar";
-    main.appendChild(botonGuardar);
 
     botonGuardar.addEventListener("click", () =>{
         if(listaCompra.length === 0){
@@ -107,9 +103,24 @@ let listaCompra = []
 
     const botonMostrar = document.createElement("button");
     botonMostrar.textContent = "Mostrar";
-    main.appendChild(botonMostrar);
     botonMostrar.addEventListener("click", ()=>{
-        window.location.href = "lista.html";
+        window.location.href = `lista.html?usuario=${usuario}`;
 
     })
+
+    const botonListas = document.createElement("button");
+    botonListas.textContent = "Listas";
+    botonListas.addEventListener("click", ()=>{
+        window.location.href = `historial.html?usuario=${usuario}`;
+
+    })
+
+const contenedorBotones = document.createElement("div");
+contenedorBotones.classList.add("contenedor-botones");
+
+contenedorBotones.appendChild(botonGuardar);
+contenedorBotones.appendChild(botonMostrar);
+contenedorBotones.appendChild(botonListas);
+
+main.appendChild(contenedorBotones);
     

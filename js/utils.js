@@ -29,3 +29,24 @@ export function existeUsuario(nuevoUsuario,usuarios){
 
     return (usuarios.find(user => user.getUsuario() === nuevoUsuario.getUsuario()))
 }
+
+
+///////////////////////// header ///////////////////////////////////
+
+export function createHeader (){
+    const bienBenida = document.createElement("h1");
+    bienBenida.textContent= `Bienvenido/a a ${document.title}`
+    document.querySelector("header").appendChild(bienBenida); 
+};
+
+
+///////////////////////// footer ///////////////////////////////////
+
+export function createFooter (){
+    const containerFooter = document.createElement("div")
+    document.querySelector("footer").appendChild(containerFooter);
+    const footerText = document.createElement("p");
+    footerText.textContent = "website created by Joan";
+    containerFooter.appendChild(footerText);
+};
+

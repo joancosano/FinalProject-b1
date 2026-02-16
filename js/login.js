@@ -1,10 +1,12 @@
 import {recuperarUsuarios} from "./utils.js";
+import { createHeader } from "./utils.js"
+import { createFooter } from "./utils.js"
 
-//////////////////header////////////////////////////
 
-const bienBenida = document.createElement("h1");
-bienBenida.textContent= `Bienvenido/a a ${document.title}`
-document.querySelector("header").appendChild(bienBenida); 
+/////////////////Header y Footer/////////////////
+
+createHeader();
+createFooter();
 
     
 ////////////////// main ////////////////////////////
@@ -62,14 +64,6 @@ const loginBackground = document.createElement("div");
 loginBackground.classList.add("loginBackground");
 
 
-////////////////// footer ////////////////////////////
-
-const footer = document.querySelector("footer");
-const containerFooter = document.createElement("div")
-const textFooter = document.createElement("p")
-textFooter.textContent="website created by Joan"
-footer.appendChild(containerFooter);
-containerFooter.appendChild(textFooter);
 
 //anidamos los elementos
 form.appendChild(userLabel)
