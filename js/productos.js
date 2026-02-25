@@ -2,15 +2,17 @@ import {categorias} from "./datos.js"
 import {productos} from "./datos.js"
 import {Lista} from "./clases.js"
 import {Usuario} from "./clases.js"
+import {recuperarUsuarios} from "./utils.js"
 import { createHeader } from "./utils.js"
 import { createFooter } from "./utils.js"
 
 const paramsUrl = new URLSearchParams(window.location.search);
 const usuario = paramsUrl.get("usuario");
 
+
 ////////////////// Header y Footer ///////////////////////////////
 
-createHeader();
+createHeader(usuario);
 createFooter();
 
 //////////////////// main ////////////////////////////////////////
@@ -20,7 +22,8 @@ const main = document.querySelector("main");
 const containerCategorias = document.createElement("div");
 containerCategorias.classList.add("container-categorias");
 const containerProductos = document.createElement("div");
-let categoriaSeleccionada = null;   
+containerProductos.classList.add("grid-productos");
+let categoriaSeleccionada = "default";   
 
 
 main.appendChild(containerCategorias);
@@ -29,13 +32,23 @@ main.appendChild(containerProductos);
 let listaCompra = []
 
     function mostrarProductos (){
+        
+        let filtroProductos = [];
         containerProductos.innerHTML="";
-        const filtroProductos = productos.filter(producto =>{
-           return producto.categoria === categoriaSeleccionada;
-        })
+
+        if (categoriaSeleccionada === "default"){
+            filtroProductos = productos
+        }else{
+            filtroProductos = productos.filter(producto =>{
+                return producto.categoria === categoriaSeleccionada;
+            })
+        }
+        
         
         filtroProductos.forEach(producto =>{
-            const marco = document.createElement("div");
+            const card = document.createElement("div");
+            card.classList.add("card-producto");
+
             const img = document.createElement("img");
             img.addEventListener("click", ()=> {
 
@@ -61,15 +74,20 @@ let listaCompra = []
 
                 console.log(listaCompra)
             })
-            marco.appendChild(img);
+
+           
             img.src = `../img/${producto.imagen}`;
             img.alt = producto.nombre;
+
             const nombreProducto = document.createElement("div");
             nombreProducto.textContent = producto.nombre;
-            nombreProducto.appendChild(marco);
-            containerProductos.appendChild(nombreProducto);
-            containerProductos.classList.add("grid-productos");
-            containerProductos.classList.add("contenedor-productos");
+            nombreProducto.classList.add("nombre-producto");
+
+            card.appendChild(nombreProducto);
+            card.appendChild(img);
+            containerProductos.appendChild(card);
+
+            
 
         })}
     
@@ -77,6 +95,7 @@ let listaCompra = []
     const boton = document.createElement("button");
     boton.textContent = element.nombre;
     containerCategorias.appendChild(boton);
+    containerCategorias.classList.add("contenedor-botones");
     boton.addEventListener("click", 
         () => {categoriaSeleccionada = element.id
             mostrarProductos();
@@ -123,4 +142,6 @@ contenedorBotones.appendChild(botonMostrar);
 contenedorBotones.appendChild(botonListas);
 
 main.appendChild(contenedorBotones);
+mostrarProductos();
+
     

@@ -12,6 +12,7 @@ export const categorias =[
     {id: "lacteos", nombre: "Leche y quesos",},
     {id: "carnes_pescados", nombre: "Carnes y pescados",},
     {id: "cereales_pasta", nombre: "Cereales y pastas",},
+    {id: "default", nombre: "Todos los productos",},
 ];
 
 export const productos = [

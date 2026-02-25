@@ -2,16 +2,14 @@ import { createHeader } from "./utils.js";
 import { createFooter } from "./utils.js";
 
 
-createHeader();
-createFooter();
 
-/*const params = new URLSearchParams(window.location.search);
-const usuario = params.get("usuario");*/
+const params = new URLSearchParams(window.location.search);
+const usuario = params.get("usuario");
 
-const usuario = "joanr";
 const main = document.querySelector("main");
 
-
+createHeader(usuario);
+createFooter();
 
 /// Recuperamos todas las listas
 const listas = JSON.parse(localStorage.getItem("listas"));
@@ -91,3 +89,25 @@ listaUsuarioActivo.forEach(element => {
     mostrarListas(element)
 });
 
+
+//Creamos botones para volver a productos e ir a la ultima lista
+
+const contenedorBotones = document.createElement("div");
+contenedorBotones.classList.add("contenedor-botones");
+
+const botonProductos = document.createElement("button");
+    botonProductos.textContent = "Productos";
+    botonProductos.addEventListener("click", ()=>{
+        window.location.href = `productos.html?usuario=${usuario}`;
+    })
+
+ const botonListas = document.createElement("button");
+    botonListas.textContent = "Lista";
+    botonListas.addEventListener("click", ()=>{
+        window.location.href = `lista.html?usuario=${usuario}`;
+
+    })
+    
+    contenedorBotones.appendChild(botonProductos); 
+    contenedorBotones.appendChild(botonListas); 
+    main.appendChild(contenedorBotones)

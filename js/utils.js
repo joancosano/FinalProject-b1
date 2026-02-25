@@ -33,9 +33,9 @@ export function existeUsuario(nuevoUsuario,usuarios){
 
 ///////////////////////// header ///////////////////////////////////
 
-export function createHeader (){
+export function createHeader (user){
     const bienBenida = document.createElement("h1");
-    bienBenida.textContent= `Bienvenido/a a ${document.title}`
+    bienBenida.textContent= `Bienvenido/a ${user} a ${document.title}`
     document.querySelector("header").appendChild(bienBenida); 
 };
 

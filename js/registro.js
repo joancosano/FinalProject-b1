@@ -76,7 +76,6 @@ selectPoblacion.id = "poblacion"
 selectPoblacion.placeholder= "introduce el nombre de tu población"
 
 // crear las options de poblacion
-
 const optionDefault = document.createElement("option");
 optionDefault.value = "";
 optionDefault.textContent = "Selecciona una población";
