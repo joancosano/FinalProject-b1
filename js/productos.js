@@ -19,8 +19,14 @@ createFooter();
 
 const body = document.querySelector("body");
 const main = document.querySelector("main");
+
+// creamos un conenedor para mostrar  los botones de las categorias
+
 const containerCategorias = document.createElement("div");
 containerCategorias.classList.add("container-categorias");
+
+// creamos un conenedor para mostrar los productos
+
 const containerProductos = document.createElement("div");
 containerProductos.classList.add("grid-productos");
 let categoriaSeleccionada = "default";   
@@ -30,6 +36,9 @@ main.appendChild(containerCategorias);
 main.appendChild(containerProductos);
 
 let listaCompra = []
+
+////////////////// Funcion mostrar productos /////////////////////////
+
 
     function mostrarProductos (){
         
@@ -64,12 +73,15 @@ let listaCompra = []
                     alert("Cantidad no valida")
                     return;
                 }
-                let productoExistente = listaCompra.find(p => p[0] === producto.id);
+
+                // sumamos cantidad en caso que el usuario añada más cantidad de un producto del que ya habia seleccionado
+
+                let productoExistente = listaCompra.find(p => p[0] === producto.nombre);
 
                 if (productoExistente){
                     productoExistente[1] += cantidad
                 }else{
-                    listaCompra.push([producto.id, cantidad])
+                    listaCompra.push([producto.nombre, cantidad])
                 }
 
                 console.log(listaCompra)
@@ -90,7 +102,11 @@ let listaCompra = []
             
 
         })}
-    
+
+
+//////////////////////// Categorias //////////////////////////////////////////
+
+
     categorias.forEach(element => {
     const boton = document.createElement("button");
     boton.textContent = element.nombre;
@@ -102,6 +118,8 @@ let listaCompra = []
 
         })
     })
+
+////////////////// Botones Guardar-Mostrar-Listas ///////////////////////////
 
     const botonGuardar = document.createElement("button");
     botonGuardar.textContent = "Guardar";
@@ -134,14 +152,26 @@ let listaCompra = []
 
     })
 
+    
+
+
+// creamos un contenedor para anidar los bótones inferiores
+
 const contenedorBotones = document.createElement("div");
 contenedorBotones.classList.add("contenedor-botones");
+
 
 contenedorBotones.appendChild(botonGuardar);
 contenedorBotones.appendChild(botonMostrar);
 contenedorBotones.appendChild(botonListas);
 
+
+// los anidamos a main
+
 main.appendChild(contenedorBotones);
+
+// ejecutamos a la funcion mostrarProductos al abrir la página para que se muestren todos los productos
+
 mostrarProductos();
 
     

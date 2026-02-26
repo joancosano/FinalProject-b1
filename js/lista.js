@@ -95,6 +95,7 @@ const botonProductos = document.createElement("button");
 
     })
     
+    
     contenedorBotones.appendChild(botonProductos); 
     contenedorBotones.appendChild(botonListas); 
 

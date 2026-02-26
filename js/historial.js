@@ -12,12 +12,14 @@ createHeader(usuario);
 createFooter();
 
 /// Recuperamos todas las listas
+
 const listas = JSON.parse(localStorage.getItem("listas"));
 console.log(listas);
 
 
 
 //filstramos las listas del usuario activo
+
 const listaUsuarioActivo = listas.filter(lista => lista.usuario===usuario);
 
 console.log(listaUsuarioActivo);
@@ -29,6 +31,7 @@ function mostrarListas (listaCompra){
     const productosComprados = listaCompra.productos;
     
     //Creamos una taba para mostrar los productos en el DOM
+
     const contenedorLista = document.createElement("table");
     const contenedorListaCompleta = document.createElement("div");
     contenedorListaCompleta.classList.add("contenedor-lista");
@@ -59,7 +62,8 @@ function mostrarListas (listaCompra){
     contenedorListaCompleta.appendChild(tituloFecha);
     contenedorListaCompleta.appendChild(contenedorLista)
     
-    //--------------Productos------------
+    //--------------Productos------------------
+
     let tablebody = document.createElement("tbody")
     contenedorLista.appendChild(tablebody);
     
@@ -80,7 +84,7 @@ function mostrarListas (listaCompra){
         tablebody.appendChild(filaProducto);
 });
 
-//mostramos los productos dentro de main
+// Mostramos los productos dentro de main
 
 main.appendChild(contenedorListaCompleta);
 }
@@ -90,7 +94,7 @@ listaUsuarioActivo.forEach(element => {
 });
 
 
-//Creamos botones para volver a productos e ir a la ultima lista
+// Creamos botones para volver a productos e ir a la ultima lista
 
 const contenedorBotones = document.createElement("div");
 contenedorBotones.classList.add("contenedor-botones");
@@ -105,6 +109,14 @@ const botonProductos = document.createElement("button");
     botonListas.textContent = "Lista";
     botonListas.addEventListener("click", ()=>{
         window.location.href = `lista.html?usuario=${usuario}`;
+
+    })
+
+
+   const botonSalir = document.createElement("button");
+   botonListas.textContent = "Salir";
+   botonListas.addEventListener("click", ()=>{
+    window.location.href = `login.html`;
 
     })
     
