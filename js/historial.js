@@ -1,26 +1,33 @@
-import { createHeader } from "./utils.js";
-import { createFooter } from "./utils.js";
+import {recuperarUsuario} from "./utils.js"
+import {createHeader,createFooter} from "./utils.js"
 
+//Recuperamos los parametros de la url del navegador
+const paramsUrl = new URLSearchParams(window.location.search);
+//Recuperamos el usuario
+const usuarioActivo = paramsUrl.get("usuario");
+//Lo filtramos mediante la funcion recuperar usuario y lo almacenamos en la variable usuario
+const usuario = recuperarUsuario(usuarioActivo);
 
-
-const params = new URLSearchParams(window.location.search);
-const usuario = params.get("usuario");
-
-const main = document.querySelector("main");
+////////////////// Header y Footer ///////////////////////////////
 
 createHeader(usuario);
 createFooter();
 
+//////////////////// main ////////////////////////////////////////
+
+const body = document.querySelector("body");
+const main = document.querySelector("main");
+
 /// Recuperamos todas las listas
 
-const listas = JSON.parse(localStorage.getItem("listas"));
-console.log(listas);
-
+const clave = "listas_" + usuario.getUsuario();
+const listacompra = JSON.parse(localStorage.getItem(clave)) || [];
+console.log(listacompra);
 
 
 //filstramos las listas del usuario activo
 
-const listaUsuarioActivo = listas.filter(lista => lista.usuario===usuario);
+const listaUsuarioActivo = listacompra;
 
 console.log(listaUsuarioActivo);
 
@@ -89,6 +96,12 @@ function mostrarListas (listaCompra){
 main.appendChild(contenedorListaCompleta);
 }
 
+// ordeno las listas para que se muestre la mas nueva primero
+
+listaUsuarioActivo.sort((a, b) => {
+    return new Date(b.fecha) - new Date(a.fecha);
+});
+
 listaUsuarioActivo.forEach(element => {
     mostrarListas(element)
 });
@@ -102,24 +115,26 @@ contenedorBotones.classList.add("contenedor-botones");
 const botonProductos = document.createElement("button");
     botonProductos.textContent = "Productos";
     botonProductos.addEventListener("click", ()=>{
-        window.location.href = `productos.html?usuario=${usuario}`;
+        window.location.href = `productos.html?usuario=${usuario.getUsuario()}`;
     })
 
  const botonListas = document.createElement("button");
     botonListas.textContent = "Lista";
     botonListas.addEventListener("click", ()=>{
-        window.location.href = `lista.html?usuario=${usuario}`;
+        window.location.href = `lista.html?usuario=${usuario.getUsuario()}`;
 
     })
 
 
    const botonSalir = document.createElement("button");
-   botonListas.textContent = "Salir";
-   botonListas.addEventListener("click", ()=>{
+   botonSalir.textContent = "Salir";
+   botonSalir.addEventListener("click", ()=>{
+    sessionStorage.removeItem("indiceUltimaLista");
     window.location.href = `login.html`;
 
     })
     
     contenedorBotones.appendChild(botonProductos); 
-    contenedorBotones.appendChild(botonListas); 
+    contenedorBotones.appendChild(botonListas);
+    contenedorBotones.appendChild(botonSalir); 
     main.appendChild(contenedorBotones)

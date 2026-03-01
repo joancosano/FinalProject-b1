@@ -1,13 +1,16 @@
 import {categorias} from "./datos.js"
 import {productos} from "./datos.js"
 import {Lista} from "./clases.js"
-import {Usuario} from "./clases.js"
-import {recuperarUsuarios} from "./utils.js"
-import { createHeader } from "./utils.js"
-import { createFooter } from "./utils.js"
+import {recuperarUsuario} from "./utils.js"
+import {createHeader,createFooter} from "./utils.js"
 
+
+//Recuperamos los parametros de la url del navegador
 const paramsUrl = new URLSearchParams(window.location.search);
-const usuario = paramsUrl.get("usuario");
+//Recuperamos el usuario
+const usuarioActivo = paramsUrl.get("usuario");
+//Lo filtramos mediante la funcion recuperar usuario y lo almacenamos en la variable usuario
+const usuario = recuperarUsuario(usuarioActivo);
 
 
 ////////////////// Header y Footer ///////////////////////////////
@@ -130,10 +133,16 @@ let listaCompra = []
             return
         }
          const fechaActual = new Date().toLocaleString();
-         const nuevaLista = new Lista(usuario, fechaActual, [...listaCompra]);
-         let listasGuardadas = JSON.parse(localStorage.getItem("listas")) || [];
-         listasGuardadas.push(nuevaLista);
-         localStorage.setItem("listas", JSON.stringify(listasGuardadas));
+         const nuevaLista = new Lista(usuario.getUsuario(), fechaActual, [...listaCompra]);
+         const clave = "listas_" + usuario.getUsuario();
+         let listasGuardadas = JSON.parse(localStorage.getItem(clave)) || [];
+         listasGuardadas.push(JSON.parse(nuevaLista.toString()));
+         localStorage.setItem(clave, JSON.stringify(listasGuardadas));
+
+        // utilizamos sesion store para saber que se ha guardado una lista en esta sesion.
+         const indiceUltimaLista = listasGuardadas.length - 1;
+         sessionStorage.setItem("indiceUltimaLista", indiceUltimaLista);
+         
          alert("Lista guardada correctamente");
          listaCompra = [];
     } )
@@ -141,18 +150,16 @@ let listaCompra = []
     const botonMostrar = document.createElement("button");
     botonMostrar.textContent = "Mostrar";
     botonMostrar.addEventListener("click", ()=>{
-        window.location.href = `lista.html?usuario=${usuario}`;
+        window.location.href = `lista.html?usuario=${usuario.getUsuario()}`;
 
     })
 
     const botonListas = document.createElement("button");
     botonListas.textContent = "Listas";
     botonListas.addEventListener("click", ()=>{
-        window.location.href = `historial.html?usuario=${usuario}`;
+        window.location.href = `historial.html?usuario=${usuario.getUsuario()}`;
 
     })
-
-    
 
 
 // creamos un contenedor para anidar los bótones inferiores

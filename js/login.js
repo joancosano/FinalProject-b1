@@ -1,12 +1,11 @@
-import {recuperarUsuarios} from "./utils.js";
-import { createHeader } from "./utils.js"
-import { createFooter } from "./utils.js"
+import {validarUsuario} from "./utils.js";
+import {createHeader,createFooter} from "./utils.js"
 
 
 /////////////////Header y Footer/////////////////
 
-createHeader();
-createFooter();
+const header = createHeader();
+const footer = createFooter();
 
     
 ////////////////// main ////////////////////////////
@@ -101,13 +100,12 @@ form.addEventListener("submit", (event) =>{
     const user = inputUser.value
     const pass = inputPass.value
 
-    const usuarios = recuperarUsuarios();
-
-    const usuarioValido = usuarios.find (u => u.getUsuario() === user && u.getPassword() === pass)
+   const usuarioValido = validarUsuario(user,pass);
 
     if (usuarioValido){
         window.location.href = `productos.html?usuario=${usuarioValido.getUsuario()}`;
     }else{
+        console.log(usuarioValido);
         const error = document.createElement("p");
         error.classList.add("error-usuario")
         error.textContent = "Usuario o password incorrecto";

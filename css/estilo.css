@@ -181,3 +181,11 @@ img {
   border-radius: 20px;
   cursor: pointer;
 }
+
+.mensaje-vacio {
+    text-align: center;
+    color: #0d7dd9;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-top: 60px;
+}

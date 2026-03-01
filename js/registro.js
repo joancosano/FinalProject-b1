@@ -1,25 +1,22 @@
 ///////////////////clases/////////////////////////
-console.log("hola")
-//importamos las clases
 
+//importamos las clases
 import {Usuario} from "./clases.js"
 import {poblaciones} from "./datos.js";
-import {existeUsuario} from "./utils.js";
-import {recuperarUsuarios} from "./utils.js";
+import {existeUsuario,recuperarUsuariosAlmacenados,createHeader,createFooter} from "./utils.js";
 
 
-////////////////// header ////////////////////////
 
-const registerText = document.createElement("h1");
-registerText.textContent = `${document.title}`
-const header = document.querySelector("header");
-header.appendChild(registerText);
+/////////////////Header y Footer/////////////////
+
+const header = createHeader();
+const footer = createFooter();
 
 ////////////////   main  //////////////////////
 
 // crear el formulario
 const body = document.querySelector("body");
-const main = document.createElement("main");
+const main = document.querySelector("main");
 const form = document.createElement("form");
 
 //crear el campo nombre
@@ -161,15 +158,10 @@ passLabel.htmlFor = "password";
 //creamos el botón registro
 const registerButton = document.createElement("button");
 registerButton.type = "submit";
-registerButton.textContent = "Registrarme"
+registerButton.textContent = "Registrarme";
 
 ///////////////////footer//////////////////////
-const footer = document.querySelector("footer");
-const containerFooter = document.createElement("div")
-const textFooter = document.createElement("p")
-textFooter.textContent="website created by Joan"
-footer.appendChild(containerFooter);
-containerFooter.appendChild(textFooter);
+
 
 //////////////////fondo registro////////////////////////
 
@@ -178,7 +170,6 @@ loginBackground.classList.add("loginBackground");
 
 ////// anidamos todos los elementos ///////////////////
 
-body.insertBefore(main, footer);
 form.appendChild(labelNombre);
 form.appendChild(inputNombre);
 form.appendChild(labelApellidos);
@@ -200,6 +191,7 @@ form.appendChild(inputPass);
 form.appendChild(registerButton);
 loginBackground.appendChild(form);
 main.appendChild(loginBackground);
+
 
 //////////////// Eventos y lógica/////////////////////
 
@@ -328,7 +320,7 @@ event.preventDefault();
 
  //recuperamos los usuarios almacenados en localStore como objetos de la clase Usuario.
 
-    const usuarios = recuperarUsuarios();
+    const usuarios = recuperarUsuariosAlmacenados();
 
 // si habia un error en pantalla al tratar de registrar un usuario duplicado lo borramos. 
 
