@@ -122,7 +122,7 @@ let listaCompra = []
         })
     })
 
-////////////////// Botones Guardar-Mostrar-Listas ///////////////////////////
+////////////////// Botones Guardar Mostrar Listas Salir ///////////////////////////
 
     const botonGuardar = document.createElement("button");
     botonGuardar.textContent = "Guardar";
@@ -173,6 +173,14 @@ let listaCompra = []
         window.location.href = `historial.html?usuario=${usuario.getUsuario()}`;
 
     })
+    
+    const botonSalir = document.createElement("button");
+    botonSalir.textContent = "Salir";
+    botonSalir.addEventListener("click", ()=>{
+    sessionStorage.removeItem("idUltimaLista");
+    window.location.href = `login.html`;
+
+    })
 
 
 // creamos un contenedor para anidar los bótones inferiores
@@ -184,6 +192,7 @@ contenedorBotones.classList.add("contenedor-botones");
 contenedorBotones.appendChild(botonGuardar);
 contenedorBotones.appendChild(botonMostrar);
 contenedorBotones.appendChild(botonListas);
+contenedorBotones.appendChild(botonSalir);
 
 
 // los anidamos a main

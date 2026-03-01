@@ -110,6 +110,7 @@ form.addEventListener("submit", (event) =>{
         error.classList.add("error-usuario")
         error.textContent = "Usuario o password incorrecto";
         inputPass.insertAdjacentElement("afterend",error);
+        alert("Usuario o password incorrecto")
         return;
     }
     })

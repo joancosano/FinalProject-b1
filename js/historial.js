@@ -82,7 +82,7 @@ function mostrarListas(listaCompra){
     tablaListas.appendChild(fila);
 }
 
-// ordeno las listas para que se muestre la mas nueva primero
+// ordenamos las listas para que se muestre la mas nueva primero
 
 listaUsuarioActivo.sort((a, b) => {
     return new Date(b.fecha) - new Date(a.fecha);
@@ -93,7 +93,7 @@ listaUsuarioActivo.forEach((element) => {
 });
 
 
-// Creamos botones para volver a productos e ir a la ultima lista
+////////////////// Botones Guardar Mostrar Listas Salir ///////////////////////////
 
 const contenedorBotones = document.createElement("div");
 contenedorBotones.classList.add("contenedor-botones");
