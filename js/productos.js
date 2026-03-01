@@ -128,20 +128,27 @@ let listaCompra = []
     botonGuardar.textContent = "Guardar";
 
     botonGuardar.addEventListener("click", () =>{
+
         if(listaCompra.length === 0){
             alert ("Lista de la compra vacia");
             return
         }
          const fechaActual = new Date().toLocaleString();
-         const nuevaLista = new Lista(usuario.getUsuario(), fechaActual, [...listaCompra]);
+
+         const nuevaLista = new Lista(
+            usuario.getUsuario(), fechaActual, [...listaCompra]
+        );
+
          const clave = "listas_" + usuario.getUsuario();
+
          let listasGuardadas = JSON.parse(localStorage.getItem(clave)) || [];
-         listasGuardadas.push(JSON.parse(nuevaLista.toString()));
+
+         listasGuardadas.push(nuevaLista);
+
          localStorage.setItem(clave, JSON.stringify(listasGuardadas));
 
         // utilizamos sesion store para saber que se ha guardado una lista en esta sesion.
-         const indiceUltimaLista = listasGuardadas.length - 1;
-         sessionStorage.setItem("indiceUltimaLista", indiceUltimaLista);
+         sessionStorage.setItem("idUltimaLista", nuevaLista.getID());
          
          alert("Lista guardada correctamente");
          listaCompra = [];
@@ -150,7 +157,13 @@ let listaCompra = []
     const botonMostrar = document.createElement("button");
     botonMostrar.textContent = "Mostrar";
     botonMostrar.addEventListener("click", ()=>{
-        window.location.href = `lista.html?usuario=${usuario.getUsuario()}`;
+         //capturamos el id de la lista creada
+        const idUltimaLista = sessionStorage.getItem("idUltimaLista");
+            if(!idUltimaLista){
+                alert("No hay ninguna lista creada en esta sesión");
+                return;
+    }
+        window.location.href = `lista.html?usuario=${usuario.getUsuario()}&id=${idUltimaLista}`;
 
     })
 

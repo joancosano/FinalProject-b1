@@ -172,10 +172,12 @@ export class Lista{
     #usuario;
     #fecha;
     #productos;
-    constructor(usuario,fecha,productos){
+    #id;
+    constructor(usuario,fecha,productos,id = Lista.generarID()){
         this.#usuario = usuario;
         this.#fecha = fecha;
         this.#productos = productos;
+        this.#id = id;
     }
 
     getUsuario(){
@@ -201,12 +203,17 @@ export class Lista{
     setProductos(productos){
         this.#productos = productos
     }
+    
+    getID(){
+        return this.#id
+    }
 
 toString(){
     return JSON.stringify({
         usuario: this.#usuario,
         fecha: this.#fecha,
         productos: this.#productos,
+        id: this.#id,
     });
 }
 toJSON(){
@@ -214,6 +221,11 @@ toJSON(){
         usuario: this.#usuario,
         fecha: this.#fecha,
         productos: this.#productos,
+        id: this.#id,
     };
+}
+// he utilizado un metodo por id para localiar las listas
+static generarID(){
+    return crypto.randomUUID();
 }
 }

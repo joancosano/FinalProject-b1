@@ -1,18 +1,31 @@
-import {recuperarUsuario} from "./utils.js"
-import {createHeader,createFooter} from "./utils.js"
-
+import {recuperarUsuario} from "./utils.js";
+import {createHeader,createFooter} from "./utils.js";
 
 
 //Recuperamos los parametros de la url del navegador
+
 const paramsUrl = new URLSearchParams(window.location.search);
+
 //Recuperamos el usuario
+
 const usuarioActivo = paramsUrl.get("usuario");
+
 //Lo filtramos mediante la funcion recuperar usuario y lo almacenamos en la variable usuario
+
 const usuario = recuperarUsuario(usuarioActivo);
 
 if (!usuario) {
     window.location.href = "login.html";
-}
+};
+
+//Recuperamos el id de la lista que puede venir de listas por url o de productos es decir la ultima lista creada en la sesion
+
+const idDesdeUrl = paramsUrl.get("id");
+const idSesion = sessionStorage.getItem("idUltimaLista");
+
+// Prioridad: si viene por URL usamos ese
+
+const idLista = idDesdeUrl ?? idSesion;
 
 
 const main = document.querySelector("main");
@@ -22,28 +35,26 @@ const main = document.querySelector("main");
 const header = createHeader(usuario);
 const footer = createFooter();
 
-
-
-// --------------- Creamos las listas----------------
-
-//Recuperamos las listas guardadas
+// Recuperamos las listas guardadas
 const clave = "listas_" + usuario.getUsuario();
 const listaCompra = JSON.parse(localStorage.getItem(clave)) || [];
 
+// --------------- Creamos las listas----------------
 
-const indiceUltimaLista = sessionStorage.getItem("indiceUltimaLista");
+if (!idLista) {
+    main.innerHTML = "<p>No hay ninguna lista disponible.</p>";
+} else {
+    //localizamos la lista correcta mediante id
+    const productosUltimalista = listaCompra.find(
+        lista => lista.id === idLista
+    );
+    //prevenimos que la lista no exista
+    if (!productosUltimalista) {
+        main.innerHTML = "<p>Lista no encontrada.</p>";
+    } else {
 
-if (indiceUltimaLista === null) {
-    const mensaje = document.createElement("p");
-    mensaje.textContent = "Todavía no hay ninguna lista en esta sesión.";
-    mensaje.classList.add("mensaje-vacio")
-    main.appendChild(mensaje);
-}else{
-        // filtramos la lista para conseguir la última lista correspondiente al usuario activo
-        const productosUltimalista = listaCompra[indiceUltimaLista];
-        // separamos la fecha y los productos en dos variables
-        const fecha = productosUltimalista.fecha
-        const productosComprados = productosUltimalista.productos
+        const fecha = productosUltimalista.fecha;
+        const productosComprados = productosUltimalista.productos;
 
 //Creamos una taba para mostrar los productos en el DOM
 const contenedorLista = document.createElement("table");
@@ -101,10 +112,9 @@ productosComprados.forEach(([producto,cantidad]) => {
 })
 main.appendChild(contenedorListaCompleta);
 sessionStorage.removeItem("listaRecienGuardada");
-};
+}
 
-
-//Creamos botones para volver a productos e ir al historial de listas
+//Creamos botones para volver a productos e ir al historial de listas y como extra un boton de imprimir.
 
 const contenedorBotones = document.createElement("div");
 contenedorBotones.classList.add("contenedor-botones");
@@ -120,10 +130,24 @@ const botonProductos = document.createElement("button");
     botonListas.addEventListener("click", ()=>{
         window.location.href = `historial.html?usuario=${usuario.getUsuario()}`;
     })
-    
-    
+
+const botonPrint = document.createElement("button");
+botonPrint.textContent = "Imprimir";
+botonPrint.addEventListener("click",()=>{
+    window.print();
+})
+
+const botonSalir = document.createElement("button");
+   botonSalir.textContent = "Salir";
+   botonSalir.addEventListener("click", ()=>{
+    sessionStorage.removeItem("idUltimaLista");
+    window.location.href = `login.html`;
+   })
+
     contenedorBotones.appendChild(botonProductos); 
     contenedorBotones.appendChild(botonListas); 
+    contenedorBotones.appendChild(botonPrint);
+    contenedorBotones.appendChild(botonSalir);
 
     
 //mostramos los productos dentro de main
@@ -132,3 +156,4 @@ const botonProductos = document.createElement("button");
 //mostramos los botones
 main.appendChild(contenedorBotones)
 
+}
